@@ -4,12 +4,12 @@ from django.db import models
 class Chat(models.Model):
     """Чат (диалог) между двумя пользователями"""
     user1 = models.ForeignKey(
-        'apps.accounts.CustomUser',
+        'accounts.CustomUser',
         on_delete=models.CASCADE,
         related_name="chats_as_user1"
     )
     user2 = models.ForeignKey(
-        'apps.accounts.CustomUser',
+        'accounts.CustomUser',
         on_delete=models.CASCADE,
         related_name="chats_as_user2"
     )
@@ -43,7 +43,7 @@ class Message(models.Model):
         related_name="messages"
     )
     sender = models.ForeignKey(
-        'apps.accounts.CustomUser',
+        'accounts.CustomUser',
         on_delete=models.CASCADE,
         related_name="sent_messages"
     )
