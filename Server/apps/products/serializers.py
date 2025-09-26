@@ -14,7 +14,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    seller = serializers.StringRelatedField()  # можно заменить на отдельный SellerSerializer
+    seller = serializers.StringRelatedField() 
     category = serializers.StringRelatedField()
 
     class Meta:
