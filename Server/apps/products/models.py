@@ -207,7 +207,7 @@ class ProductImage(models.Model):
 
     
 class ProductReview(models.Model):
-    """Отзывы о товарах"""
+
     class Rating(models.IntegerChoices):
         ONE = 1, '1 звезда'
         TWO = 2, '2 звезды'
@@ -219,27 +219,24 @@ class ProductReview(models.Model):
         Product,
         on_delete=models.CASCADE,
         related_name='reviews',
-        verbose_name="Товар"
     )
     user = models.ForeignKey(
         'accounts.CustomUser',
         on_delete=models.CASCADE,
         related_name='reviews',
-        verbose_name="Пользователь"
     )
+
     rating = models.IntegerField(
         choices=Rating.choices,
         verbose_name="Рейтинг"
     )
-    title = models.CharField(max_length=255, verbose_name="Заголовок отзыва")
-    comment = models.TextField(verbose_name="Комментарий")
-    is_approved = models.BooleanField(default=False, verbose_name="Одобрен")
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Создан")
-    updated_at = models.DateTimeField(auto_now=True, verbose_name="Обновлен")
+    title = models.CharField(max_length=255)
+    comment = models.TextField()
+    is_approved = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name = "Отзыв"
-        verbose_name_plural = "Отзывы"
         ordering = ['-created_at']
         unique_together = ('product', 'user')
 
