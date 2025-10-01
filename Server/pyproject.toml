@@ -12,7 +12,9 @@ dependencies = [
     "djangorestframework (>=3.16.1,<4.0.0)",
     "djangorestframework-simplejwt (>=5.5.1,<6.0.0)",
     "python-decouple (>=3.8,<4.0)",
-    "pillow (>=11.3.0,<12.0.0)"
+    "pillow (>=11.3.0,<12.0.0)",
+    "django-filter (>=25.1,<26.0)",
+    "drf-yasg (>=1.21.11,<2.0.0)"
 ]
 
 
