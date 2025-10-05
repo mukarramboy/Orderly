@@ -55,3 +55,45 @@ class Stage4View(APIView):
             serializer.save()
             return Response({'message': 'Профиль обновлен'}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class LoginView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        email_or_phone = request.data.get('email_or_phone')
+        password = request.data.get('password')
+        if not email_or_phone or not password:
+            return Response({'error': 'Email/Phone and password are required'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            if '@' in email_or_phone:
+                user = User.objects.get(email=email_or_phone)
+            else:
+                user = User.objects.get(phone=email_or_phone)
+        except User.DoesNotExist:
+            return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+        if not user.check_password(password):
+            return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+        refresh = RefreshToken.for_user(user)
+        return Response({
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+            'user': {'id': user.id, 'email': user.email}
+        }, status=status.HTTP_200_OK)
+    
+
+class RefreshTokenView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        refresh_token = request.data.get('refresh')
+        if not refresh_token:
+            return Response({'error': 'Refresh token is required'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            refresh = RefreshToken(refresh_token)
+            data = {
+                'access': str(refresh.access_token),
+            }
+            return Response(data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error': 'Invalid refresh token'}, status=status.HTTP_400_BAD_REQUEST)
